@@ -90,7 +90,7 @@ router.delete("/:id", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-});
+}); 
 
 // LOGIN API - update status = true nếu email + username đúng
 router.post("/login", async (req, res) => {
