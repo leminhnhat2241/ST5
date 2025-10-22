@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Upload Single Avatar</title>
+  </head>
+  <body>
+    <h3>Upload Single Avatar (PUT /api/users/me/avatar)</h3>
+    <label
+      >Token:
+      <input
+        id="token"
+        style="width: 400px"
+        placeholder="Bearer token or token string" /></label
+    ><br /><br />
+    <input type="file" id="file" accept="image/*" /><br /><br />
+    <button id="btn">Upload</button>
+    <pre id="out"></pre>
+
+    <script>
+      document.getElementById("btn").addEventListener("click", async () => {
+        const fileEl = document.getElementById("file");
+        const token = document.getElementById("token").value.trim();
+        if (!fileEl.files.length) {
+          alert("Choose a file");
+          return;
+        }
+
+        const fd = new FormData();
+        fd.append("avatar", fileEl.files[0]);
+
+        const res = await fetch("/api/users/me/avatar", {
+          method: "PUT",
+          headers: token
+            ? {
+                Authorization: token.startsWith("Bearer")
+                  ? token
+                  : "Bearer " + token,
+              }
+            : {},
+          body: fd,
+        });
+
+        const json = await res.json();
+        document.getElementById("out").textContent = JSON.stringify(
+          json,
+          null,
+          2
+        );
+      });
+    </script>
+  </body>
+</html>
